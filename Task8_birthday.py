@@ -12,15 +12,31 @@ def get_birthdays_per_week(users):
 
     for user in users:
         name = user['name']
-        birthday = user['birthday'].date()
+        birthday = user['birthday']
 
         if current_week_start <= birthday <= current_week_end:
             weekday = weekdays[birthday.weekday()]
 
             if weekday in birthday_dict:
-                birthday_dict[weekday].append(name)
+                birthday_dict[weekday].append((name, birthday))
             else:
-                birthday_dict[weekday] = [name]
+                birthday_dict[weekday] = [(name, birthday)]
 
-    for weekday, names in birthday_dict.items():
-        print(f"{weekday}: {', '.join(names)}")
+    return birthday_dict
+
+
+
+
+users = [
+    {'name': 'Bill', 'birthday': datetime.date(1991, 6, 6)},
+    {'name': 'Jill', 'birthday': datetime.date(1992, 6, 7)},
+    {'name': 'Kim', 'birthday': datetime.date(1985, 6, 6)},
+    {'name': 'Jan', 'birthday': datetime.date(1995, 6, 5)}
+]
+
+birthdays = get_birthdays_per_week(users)
+
+for weekday, entries in birthdays.items():
+    print(f"{weekday}:")
+    for name, birthday in entries:
+        print(f"  {name} - {birthday.strftime('%Y-%m-%d')}")
